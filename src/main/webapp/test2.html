@@ -2,12 +2,12 @@
 
 <!--
 Project name(项目名称)：Element_UI_input_enter_suggestion
-  File name(文件名): test1
+  File name(文件名): test2
   Authors(作者）: mao
   Author QQ：1296193245
   GitHub：https://github.com/maomao124/
-  Date(创建日期)： 2022/4/27
-  Time(创建时间)： 22:29
+  Date(创建日期)： 2022/4/28
+  Time(创建时间)： 16:20
   Description(描述)： 无
 -->
 
@@ -18,33 +18,51 @@ Project name(项目名称)：Element_UI_input_enter_suggestion
     <link rel="stylesheet" href="css/element-ui.css">
     <script src="js/vue.js"></script>
     <script src="js/element-ui.js"></script>
+    <style>
+        .el-autocomplete {
+            width: 30%;
+        }
+
+        li {
+            line-height: normal;
+            padding: 7px;
+        }
+
+        .name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .addr {
+            font-size: 16px;
+            color: #b4b4b4;
+        }
+
+        .highlighted .addr {
+            color: #ddd;
+        }
+    </style>
+
 </head>
 <body>
 
 <div id="app">
-    <el-row class="demo-autocomplete">
-        <el-col :span="12">
-            <div class="sub-title">激活即列出输入建议</div>
-            <el-autocomplete
-                    class="inline-input"
-                    v-model="state1"
-                    :fetch-suggestions="querySearch"
-                    placeholder="请输入内容"
-                    @select="handleSelect(state1)"
-            ></el-autocomplete>
-        </el-col>
-        <el-col :span="12">
-            <div class="sub-title">输入后匹配输入建议</div>
-            <el-autocomplete
-                    class="inline-input"
-                    v-model="state2"
-                    :fetch-suggestions="querySearch"
-                    placeholder="请输入内容"
-                    :trigger-on-focus="false"
-                    @select="handleSelect(state2)"
-            ></el-autocomplete>
-        </el-col>
-    </el-row>
+    <el-autocomplete
+            popper-class="my-autocomplete"
+            v-model="state"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            @select="handleSelect(state)">
+        <i
+                class="el-icon-edit el-input__icon"
+                slot="suffix"
+                @click="handleIconClick">
+        </i>
+        <template slot-scope="{ item }">
+            <div class="name">{{ item.value }}</div>
+            <span class="addr">{{ item.address }}</span>
+        </template>
+    </el-autocomplete>
 </div>
 
 
@@ -54,8 +72,7 @@ Project name(项目名称)：Element_UI_input_enter_suggestion
         data:
             {
                 restaurants: [],
-                state1: '',
-                state2: ''
+                state: ''
             },
         methods:
             {
@@ -63,7 +80,6 @@ Project name(项目名称)：Element_UI_input_enter_suggestion
                 {
                     var restaurants = this.restaurants;
                     var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-                    // 调用 callback 返回建议列表的数据
                     cb(results);
                 },
                 createFilter(queryString)
@@ -273,6 +289,10 @@ Project name(项目名称)：Element_UI_input_enter_suggestion
                 handleSelect(item)
                 {
                     console.log(item);
+                },
+                handleIconClick(ev)
+                {
+                    console.log(ev);
                 }
             },
         mounted()
@@ -281,6 +301,5 @@ Project name(项目名称)：Element_UI_input_enter_suggestion
         },
     })
 </script>
-
 </body>
 </html>
